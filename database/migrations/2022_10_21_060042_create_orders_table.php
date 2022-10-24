@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');//  add F-key for user table
-            $table->string('pincode')->nullable();
+            // $table->integer('user_id');//  add F-key for user table
+            $table->foreignId('user_id')->references('id')->on('users');
+            // $table->string('pincode')->nullable();
             $table->string('status_message')->nullable();
-            $table->string('payment_id')->nullable();
+            // $table->string('payment_id')->nullable();
             // $table->foreign('table_id');
             $table->timestamps();
         });

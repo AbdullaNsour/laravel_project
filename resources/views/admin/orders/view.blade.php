@@ -16,7 +16,7 @@
 
                         <h4 class="text-primary" style="padding-bottom: 5px">
                             <i class="fa fa-shopping-cart text-dark"></i> My Order Details
-                            <a href="" class="btn btn-danger btn-sm float-end">Back</a>
+                            <a href="{{url('orders')}}" class="btn btn-danger btn-sm float-end">Back</a>
                         </h4>
                         <hr>
 
@@ -24,28 +24,24 @@
                             <div class="col-md-6">
                                 <h4><b>Order Details</b></h4><br>
                                 <hr>
-                                <h6>Order Id: {{ $order->id }}</h6>
-                                {{-- <h6>Tracking Id/No.: {{ $order->tracking_no }} </h6> --}}
-                                <h6>Ordered Date: {{ $order->created_at->format('d-m-Y h:1 A') }} </h6>
-                                <h6>Payment Mode: {{ $order->payment_mode }} </h6>
-                                {{-- <h6 class="border p-2 text-success">
-                                    Order Status Message: <span class="text-uppercase">{{ $order->status_message }}
-                                    </span>
-                                </h6> --}}
+                                @foreach ($user as $users)
+                                <h6>User Id: {{ $users->id }}</h6>
+                                <h6>User Date: {{ $users->created_at }} </h6>
+                             
+                             
                                 <br>
                             </div>
                             <div class="col-md-6">
                                 <h4><b>User Details</b></h4><br>
                                 <hr>
-                                <h6>Full Name: {{ $order->fullname }}</h6>
-                                <h6>Email Id: {{ $order->email }}</h6>
-                                <h6>Phone: {{ $order->phone }}</h6>
-                                {{-- <h6>Address: {{ $order->address }}</h6> --}}
-                                {{-- <h6>Pin code: {{ $order->pincode }}</h6> --}}
+                                <h6>Full Name: {{ $users->name }}</h6>
+                                <h6>Email Id: {{ $users->email }}</h6>
+                          
                             </div>
+                            @endforeach
 
                         </div>
-
+                        <img src="" alt="">
                         <h4><b>Order Items</b></h4>
                         <hr>
 
@@ -62,8 +58,13 @@
                                     <th>Total</th>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach ($order->orderItem as $orderItem)
-                                        
+                                    {{-- @foreach ($order->orderItems as $orderItem)
+                                        <tr>
+                                            <td width='10%'>{{ $orderItem->id }}</td>
+                                            <td width='10%'>
+                       
+                                            </td>
+                                        </tr>
                                     @endforeach --}}
                                 </tbody>
 

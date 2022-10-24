@@ -22,28 +22,29 @@
                                 <thead>
                                     <th>Order ID</th>
                                     <th>Username</th>
-                                    <th>Payment Mode</th>
+                                    
                                     <th>Ordered Date</th>
-                                    <th>Status Message</th>
+                                    {{-- <th></th>
+                                    <th>Status Message</th> --}}
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
-                                    @forelse ($orders as $item)
+                                    {{-- @forelse ($orders as $item) --}}
+                                    @foreach($users as $user)
                                         <tr>                                            
-                                            <td>{{ $item->id }}</td>
+                                            <td>{{ $user->id }}</td>
 
-                                            <td>{{ $item->tracking_no }}</td>
-                                            <td>{{ $item->payment_mode }}</td>
-                                            <td>{{ $item->created_at->format('d-m-Y') }}</td>
-                                            <td>{{ $item->status_message }}</td>
-                                            <td><a href="{{ url('orders/'. $item->id)}}"
+                                            <td>{{ $user->name  }}</td>
+                                       
+
+                                            {{-- <td>{{ $item->payment_mode }}</td> --}}
+                                            <td>{{ $user->created_at }}</td>
+                                            {{-- <td>{{ $item->status_message }}</td> --}}
+                                            <td><a href="{{ url('orders/'. $user->id)}}"
                                                     class="btn btn-primary btn-sm">View</a> </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6">No Orders Available</td>
-                                        </tr>
-                                    @endforelse
+            
+                                    @endforeach
                                 </tbody>
 
                             </table>

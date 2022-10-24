@@ -4,6 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class Kernel extends ConsoleKernel
 {
@@ -16,12 +19,25 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+
+        
+        $schedule->call(function () {
+            $reservations = DB::table('reservations')->get(); 
+            foreach($reservations as $res) { 
+                if (time() > ((strtotime($res->res_date) - 10800) + 900)) { 
+                    echo "Reservation with id: $res->id has been deleted \n "; 
+                    DB::table('reservations')->where('id', $res->id)->delete(); 
+                }
+            }
+        })->everyMinute();
     }
 
     /**
      * Register the commands for the application.
      *
-     * @return void
+     * @return void 
+     * 
      */
     protected function commands()
     {

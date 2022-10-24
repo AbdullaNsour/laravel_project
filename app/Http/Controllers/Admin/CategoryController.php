@@ -11,15 +11,13 @@ use Illuminate\Support\Facades\Storage;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource. d
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
         $categories = Category::all();
-        // dd($categories);
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -41,12 +39,18 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request)
     {
-        $image = $request->file('image')->store('public/categories');
+        
+        if($request->file('image')){
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('public/cat'), $filename);
+            $input['image']= $filename;
+        }
 
         Category::create([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $image
+            'image' => $filename
         ]);
 
         return to_route('admin.categories.index')->with('success', 'Category created successfully.');
@@ -88,15 +92,20 @@ class CategoryController extends Controller
             'description' => 'required'
         ]);
         $image = $category->image;
-        if ($request->hasFile('image')) {
-            Storage::delete($category->image);
-            $image = $request->file('image')->store('public/categories');
+        
+        if($request->file('image')){
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('public/Image'), $filename);
+            $input['image']= $filename;
+        }else{
+            unset($input['image']);
         }
 
         $category->update([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $image
+            'image' => $filename
         ]);
         return to_route('admin.categories.index')->with('success', 'Category updated successfully.');
     }

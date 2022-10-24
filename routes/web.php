@@ -5,11 +5,15 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\TableController;
+use App\Http\Controllers\OrdersController;
+
 use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
 use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
 use App\Http\Controllers\Frontend\ReservationController as FrontendReservationController;
 use App\Http\Controllers\Frontend\WelcomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\userController;
+
 
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -23,16 +27,30 @@ Route::post('/reservation/step-two', [FrontendReservationController::class, 'sto
 Route::get('/thankyou', [WelcomeController::class, 'thankyou'])->name('thankyou');
 
 
-//1-on terminal add: "php artisan make:controller Frontend\OrderController"
-//2-create function index on Frontend\OrderController
-//3-created ordertable and order item table with  modle
-Route::get('orders', [App\Http\Controllers\Frontend\OrderController::class, 'index'])->middleware(['auth', 'admin']);
-Route::get('orders/{orderId}', [App\Http\Controllers\Frontend\OrderController::class, 'show'])->middleware(['auth', 'admin']);
-
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/welcome', function () {
+    return view('welcome');
+})->middleware(['auth'])->name('dashboard');
+
+Route::resource('user', userController::class);
+
+// Route::get('/orders123', function () {
+//     return view('orders');
+// });
+
+Route::get('/orders1', [OrdersController::class, 'index'])->name('orders1.index');
+Route::post('/orders1', [OrdersController::class, 'store'])->name('orders1.store');
+
+
+
+
+
+Route::get('orders', [App\Http\Controllers\Frontend\OrderController::class, 'index'])->middleware(['auth', 'admin']);
+Route::get('orders/{id}', [App\Http\Controllers\Frontend\OrderController::class, 'show'])->middleware(['auth', 'admin']);
+
 
 Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
@@ -40,7 +58,9 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::resource('/menus', MenuController::class);
     Route::resource('/tables', TableController::class);
     Route::resource('/reservations', ReservationController::class);
-    
+    Route::resource('/orders', App\Http\Controllers\Frontend\OrderController::class);
+
 });
 
 require __DIR__ . '/auth.php';
+

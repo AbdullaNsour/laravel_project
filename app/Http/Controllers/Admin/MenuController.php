@@ -41,12 +41,17 @@ class MenuController extends Controller
      */
     public function store(MenuStoreRequest $request)
     {
-        $image = $request->file('image')->store('public/menus');
+        if($request->file('image')){
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('public/cat'), $filename);
+            $input['image']= $filename;
+        }
 
         $menu = Menu::create([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $image,
+            'image' => $filename,
             'price' => $request->price
         ]);
 
@@ -85,15 +90,19 @@ class MenuController extends Controller
             'price' => 'required'
         ]);
         $image = $menu->image;
-        if ($request->hasFile('image')) {
-            Storage::delete($menu->image);
-            $image = $request->file('image')->store('public/menus');
+        if($request->file('image')){
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('public/Image'), $filename);
+            $input['image']= $filename;
+        }else{
+            unset($input['image']);
         }
 
         $menu->update([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $image,
+            'image' => $filename,
             'price' => $request->price
         ]);
 
@@ -111,8 +120,8 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        Storage::delete($menu->image);
-        $menu->categories()->detach();
+        // Storage::delete($menu->image);
+        // $menu->categories()->detach();
         $menu->delete();
         return to_route('admin.menus.index')->with('danger', 'Menu deleted successfully.');
     }
